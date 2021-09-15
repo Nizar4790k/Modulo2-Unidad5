@@ -28,7 +28,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.FechaIngreso, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DatePickerFor(model => model.FechaIngreso, "autoclose=true", "todayBtn=true", "todayHighlight=true")
+                @Html.EditorFor(model => model.FechaIngreso, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.FechaIngreso, "", new { @class = "text-danger" })
 
 

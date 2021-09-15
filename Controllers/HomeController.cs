@@ -88,18 +88,51 @@ namespace Tarea5.Controllers
 
        
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
+        public ActionResult Edit(int ?id) {
 
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            }
+
+
+            var empleado = HomeController.listaEmpleados.Where(emp => emp.Codigo == id).First();
+
+            if (empleado == null)
+            {
+                return HttpNotFound();
+            }
+            return View(empleado);
+
+
+           
+
+
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
 
-            return View();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Codigo,Nombre,FechaIngreso,SueldoNeto")] Empleado empleado)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var empleadosConsultados = HomeController.listaEmpleados.Where(emp => emp.Codigo == empleado.Codigo);
+                 foreach(Empleado emp in empleadosConsultados)
+                {
+                    emp.Nombre = empleado.Nombre;
+                    emp.SueldoNeto = empleado.SueldoNeto;
+                    emp.FechaIngreso = empleado.FechaIngreso;
+                }
+
+                return RedirectToAction("Index");
+            }
+
+            return View(empleado);
         }
+
+
     }
 }
