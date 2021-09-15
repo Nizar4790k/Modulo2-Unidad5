@@ -81,13 +81,10 @@ namespace Tarea5.Controllers
             return View();
         }
 
-        public ActionResult Delete()
-        {
-            return View();
-        }
-
        
 
+
+        // GET: Cita/Edit/5
         public ActionResult Edit(int ?id) {
 
             if (id == null)
@@ -111,7 +108,7 @@ namespace Tarea5.Controllers
 
         }
 
-
+        // POST Empleado/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Codigo,Nombre,FechaIngreso,SueldoNeto")] Empleado empleado)
@@ -120,7 +117,8 @@ namespace Tarea5.Controllers
             {
 
                 var empleadosConsultados = HomeController.listaEmpleados.Where(emp => emp.Codigo == empleado.Codigo);
-                 foreach(Empleado emp in empleadosConsultados)
+                 
+                foreach(Empleado emp in empleadosConsultados)
                 {
                     emp.Nombre = empleado.Nombre;
                     emp.SueldoNeto = empleado.SueldoNeto;
@@ -131,6 +129,49 @@ namespace Tarea5.Controllers
             }
 
             return View(empleado);
+        }
+
+
+        // GET: Empleado/Edit/5
+        public ActionResult Delete(int? id)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            }
+
+
+            var empleado = HomeController.listaEmpleados.Where(emp => emp.Codigo == id).First();
+            
+
+            if (empleado == null)
+            {
+                return HttpNotFound();
+            }
+            return View(empleado);
+
+
+
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            HomeController.listaEmpleados.RemoveAll(empleado => empleado.Codigo == id);
+
+
+           return RedirectToAction("Index");
+          
+           
         }
 
 
